@@ -1,0 +1,34 @@
+version: '3'
+
+networks:
+  backend:
+    driver: graphql-network
+
+services:
+  graphql-server:
+    image: graphql-server
+    build:
+      context: ./server
+    container_name: graphql-server
+    working_dir: /server
+    volumes:
+      - ../server:/server
+    ports:
+      - 8080:8080
+    tty: true
+    networks:
+      - graphql-network
+
+  graphql-db:
+    image: graphql-db
+    build:
+      context: ./mysql
+    container_name: graphql-db
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=secret
+    volumes:
+      - ./mysql/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      - ./mysql/data:/var/lib/mysql
+    networks:
+      - graphql-network
