@@ -22,13 +22,14 @@ services:
   graphql-db:
     image: graphql-db
     build:
-      context: ./mysql
+      context: ./postgres
     container_name: graphql-db
     restart: always
     environment:
-      - MYSQL_ROOT_PASSWORD=secret
+      - POSTGRES_USER: "${POSTGRES_USER}"
+      - POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
     volumes:
-      - ./mysql/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
-      - ./mysql/data:/var/lib/mysql
+      - ./postgres/data:/var/lib/postgresql/data
+      - ./postgres/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
     networks:
       - graphql-network

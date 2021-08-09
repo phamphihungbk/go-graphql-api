@@ -1,4 +1,0 @@
-CREATE USER IF NOT EXISTS 'graphqlgo-user' IDENTIFIED BY 'graphqlgo-password';
-CREATE DATABASE IF NOT EXISTS `graphqlgo-db` COLLATE 'utf8_general_ci';
-GRANT ALL PRIVILEGES ON `graphqlgo-db`.* TO 'go-user'@'%';
-FLUSH PRIVILEGES ;
