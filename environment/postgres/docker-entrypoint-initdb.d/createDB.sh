@@ -13,7 +13,7 @@
 #
 #
 psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname="$POSTGRES_DB" <<-EOSQL
-     CREATE USER tinny_user WITH PASSWORD 'tinny_password';
-     CREATE DATABASE tinny_db;
-     GRANT ALL PRIVILEGES ON DATABASE tinny_db TO tinny_user;
+     CREATE USER graphql_user WITH PASSWORD 'graphql_pass';
+     CREATE DATABASE graphql_db;
+     GRANT ALL PRIVILEGES ON DATABASE graphql_db TO graphql_user;
 EOSQL

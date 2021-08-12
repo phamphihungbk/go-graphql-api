@@ -1,8 +1,8 @@
 version: '3'
 
 networks:
-  backend:
-    driver: graphql-network
+  graphql-network:
+    driver: bridge
 
 services:
   graphql-server:
@@ -13,6 +13,7 @@ services:
     working_dir: /server
     volumes:
       - ../server:/server
+      - ../.env:/server/.env
     ports:
       - 8080:8080
     tty: true
@@ -26,8 +27,8 @@ services:
     container_name: graphql-db
     restart: always
     environment:
-      - POSTGRES_USER: "${POSTGRES_USER}"
-      - POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+      POSTGRES_USER: "${POSTGRES_USER}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
     volumes:
       - ./postgres/data:/var/lib/postgresql/data
       - ./postgres/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
