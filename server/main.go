@@ -1,38 +1,26 @@
 package main
 
 import (
-	"gorm.io/gorm"
 	"github.com/joho/godotenv"
-	"log"
 	"github.com/phamphihungbk/go-graphql/configs"
-	_ "github.com/jinzhu/gorm/dialects/postgres"
+	"github.com/phamphihungbk/go-graphql/database/migrations"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
+	"log"
 )
 
-type Product struct {
-	gorm.Model
-	Code  string
-	Price uint
-}
 
 func main() {
-	err := godotenv.Load()
-
-	if err != nil {
+	if err := godotenv.Load(); err != nil {
 		log.Fatal("Error loading .env file")
 	}
-
 	config := configs.GetConfig()
-	println(config.Postgres.GetPostgresConnectionInfo())
-	Connects to PostgresDB
-	db, err := gorm.Open(
-		config.Postgres.Dialect(),
-		config.Postgres.GetPostgresConnectionInfo(),
-	)
 
+	db, err := gorm.Open(postgres.Open(config.Postgres.GetConnectionInfo()), &gorm.Config{})
 	if err != nil {
 		panic(err)
 	}
 
 	// Migrate the schema
-	db.AutoMigrate(&Product{})
+	db.AutoMigrate(&migrations.User{}, &migrations.Test{})
 }

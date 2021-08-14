@@ -21,3 +21,11 @@ server-start:
 .PHONY: copy-files
 copy-files:
 	cp ./config/env.dev .env
+
+.PHONY: db-list ## list all database tables
+db-list:
+	docker exec -it graphql-db sh -c "psql -l"
+
+# postgres query
+# \c graphql_db connect to db
+# \dt list out all the tables
