@@ -17,6 +17,5 @@ type UserService struct {
 // @Summary UserService constructor
 func NewUserService(repository repositories.UserRepositoryInterface) UserServiceInterface {
 	baseService := abstracts.NewBaseService(repository).(*abstracts.BaseService)
-	service := &UserService{baseService, repository}
-	return service
+	return &UserService{baseService, repository}
 }

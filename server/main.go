@@ -11,16 +11,13 @@ import (
 
 
 func main() {
-	if err := godotenv.Load(); err != nil {
-		log.Fatal("Error loading .env file")
-	}
-	config := configs.GetConfig()
+	container := di.BuildContainer()
 
-	db, err := gorm.Open(postgres.Open(config.Postgres.GetConnectionInfo()), &gorm.Config{})
+	err := container.Invoke(func(server *di.Server) {
+		server.Run()
+	})
+
 	if err != nil {
 		panic(err)
 	}
-
-	// Migrate the schema
-	db.AutoMigrate(&migrations.User{}, &migrations.Test{})
 }

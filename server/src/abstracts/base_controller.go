@@ -15,7 +15,7 @@ type BaseControllerInterface interface {
 }
 
 type BaseController struct {
-	*BaseController
+	BaseControllerInterface
 	Service BaseServiceInterface
 }
 
