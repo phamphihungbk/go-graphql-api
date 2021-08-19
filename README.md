@@ -38,6 +38,10 @@ Use camel case, exported functions should start with uppercase
 - Single letter represents index: i, j, k 
 ```
 
+### Diagram Flow
+
+![diagram flow](./images/flow-diagram.png)
+
 ### Reference Documents:
 - https://dave.cheney.net/practical-go/presentations/qcon-china.html
 - https://medium.com/@kdnotes/golang-naming-rules-and-conventions-8efeecd23b68
