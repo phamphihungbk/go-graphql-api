@@ -18,6 +18,14 @@ db-create:
 server-start:
 	docker exec -it graphql-server sh -c "go run main.go"
 
+.PHONY: server-generate
+server-generate:
+	docker exec -it graphql-server sh -c "go generate main.go"
+
+.PHONY: server-build
+server-build:
+	docker exec -it graphql-server sh -c "go build main.go"
+
 .PHONY: copy-files
 copy-files:
 	cp ./config/env.dev .env

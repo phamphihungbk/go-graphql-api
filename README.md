@@ -15,6 +15,7 @@ Go (Golang)🚀 GraphQL API + Postgres
 - Docker
 - GraphQL
 - Postgres
+- Google/Wire
 
 ## Golang name conventions:
 
@@ -37,10 +38,6 @@ Use camel case, exported functions should start with uppercase
 - Use relatively simple (short) name
 - Single letter represents index: i, j, k 
 ```
-
-### Diagram Flow
-
-![diagram flow](./images/flow-diagram.png)
 
 ### Reference Documents:
 - https://dave.cheney.net/practical-go/presentations/qcon-china.html

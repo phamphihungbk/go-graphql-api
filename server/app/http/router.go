@@ -1,15 +1,14 @@
-package routes
+package http
 
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
-func Setup(builder *di.Builder) *gin.Engine {
+func Setup(userController) *gin.Engine {
 
 	r := gin.New()
 	r.Use(gin.Recovery())
-	userController := dic.Container.Get(dic.UserController).(*controller.UserController)
 
 	// Ping
 	//
