@@ -34,6 +34,10 @@ copy-files:
 db-list:
 	docker exec -it graphql-db sh -c "psql -l"
 
+.PHONY: db-list ## list all database tables
+go-get:
+	docker exec -it graphql-db sh -c "go get -d -v ./..."
+
 # postgres query
 # \c graphql_db connect to db
 # \dt list out all the tables

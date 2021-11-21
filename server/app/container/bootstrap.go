@@ -1,5 +1,0 @@
-package container
-
-func initApp() {
-
-}

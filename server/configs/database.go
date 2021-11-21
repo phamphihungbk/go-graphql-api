@@ -6,31 +6,31 @@ import (
 	"strconv"
 )
 
-type DBConfig struct {
-	Host     string `env:"DB_HOST"`
-	Port     int    `env:"DB_PORT"`
-	User     string `env:"DB_USER"`
-	Password string `env:"DB_PASSWORD"`
-	Name     string `env:"DB_NAME"`
+type DBCfg struct {
+	host     string `env:"DB_HOST"`
+	port     int    `env:"DB_PORT"`
+	user     string `env:"DB_USER"`
+	password string `env:"DB_PASSWORD"`
+	dbName   string `env:"DB_NAME"`
 }
 
-func (c DBConfig) GetConnectionInfo() string {
+func (c *DBCfg) GetConnectionInfo() string {
 	return fmt.Sprintf(
-		"host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
-		c.Host, c.Port, c.User, c.Password, c.Name)
+		"host=%s port=%d user=%s password=%s dbName=%s sslmode=disable",
+		c.host, c.port, c.user, c.password, c.dbName)
 }
 
-func GetDBConfig() DBConfig {
+func NewDBCfg() *DBCfg {
 	port, err := strconv.Atoi(os.Getenv("DB_PORT"))
 	if err != nil {
 		panic(err)
 	}
 
-	return DBConfig{
-		Host:     os.Getenv("DB_HOST"),
-		Port:     port,
-		User:     os.Getenv("DB_USER"),
-		Password: os.Getenv("DB_PASSWORD"),
-		Name:     os.Getenv("DB_NAME"),
+	return &DBCfg{
+		host:     os.Getenv("DB_HOST"),
+		port:     port,
+		user:     os.Getenv("DB_USER"),
+		password: os.Getenv("DB_PASSWORD"),
+		dbName:   os.Getenv("DB_NAME"),
 	}
 }
