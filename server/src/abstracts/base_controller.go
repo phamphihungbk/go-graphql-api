@@ -99,5 +99,5 @@ func (c BaseController) respondWithCustomData(context *gin.Context, data interfa
 }
 
 func (c BaseController) replyError(context *gin.Context, message string, code int) {
-	context.JSON(code, gin.H{"message": message, "status": StatusError})
+	context.JSON(code, gin.H{"message": message, "status": http.StatusText(code)})
 }
