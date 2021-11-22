@@ -9,15 +9,19 @@ Go (Golang)🚀 GraphQL API + Postgres
 - Difference between GraphQL and API.
 - Best practices for GraphQL and Golang.
 
+**Flow Chart**
+
+![flowchart](flow-chart.jpg)
+
 ## Technologies used:
 
 - Golang
 - Docker
 - GraphQL
 - Postgres
-- Google/Wire
+- Wire
 
-## Golang name conventions:
+## Golang best practices:
 
 **Function**
 
@@ -38,10 +42,3 @@ Use camel case, exported functions should start with uppercase
 - Use relatively simple (short) name
 - Single letter represents index: i, j, k 
 ```
-
-### Reference Documents:
-- https://dave.cheney.net/practical-go/presentations/qcon-china.html
-- https://medium.com/@kdnotes/golang-naming-rules-and-conventions-8efeecd23b68
-- https://www.geeksforgeeks.org/pointers-in-golang/
-- https://www.geeksforgeeks.org/inheritance-in-golang/
-- https://flaviocopes.com/golang-methods-receivers/
