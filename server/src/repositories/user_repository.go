@@ -12,12 +12,11 @@ type UserRepositoryInterface interface {
 
 type UserRepository struct {
 	*abstracts.BaseRepository
-	model models.User
 }
 
 // @Summary UserRepository constructor
 func NewUserRepository(db *gorm.DB) UserRepositoryInterface {
-	var model models.User
-	repo := abstracts.NewBaseRepository(db, &model).(*abstracts.BaseRepository)
-	return &UserRepository{repo, model}
+	var model *models.User
+	baseRepo := abstracts.NewBaseRepository(db, &model)
+	return &UserRepository{baseRepo}
 }

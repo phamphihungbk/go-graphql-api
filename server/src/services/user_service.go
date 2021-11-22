@@ -10,12 +10,12 @@ type UserServiceInterface interface {
 }
 
 type UserService struct {
-	*abstracts.BaseServiceInterface
-	repository repositoies.UserRepositoryInterface
+	*abstracts.BaseService
+	userRepository repositories.UserRepositoryInterface
 }
 
 // @Summary UserService constructor
-func NewUserService(repository repositories.UserRepositoryInterface) UserServiceInterface {
-	baseService := abstracts.NewBaseService(repository).(*abstracts.BaseService)
-	return &UserService{baseService, repository}
+func NewUserService(userRepository repositories.UserRepositoryInterface) UserServiceInterface {
+	baseService := abstracts.NewBaseService(userRepository)
+	return &UserService{baseService, userRepository}
 }
