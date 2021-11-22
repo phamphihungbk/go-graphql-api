@@ -7,16 +7,12 @@ import (
 	"log"
 )
 
-type Manager struct {
-	DB *gorm.DB
-}
-
-func NewDBConnection(connectionInfo string) *Manager {
-	db, err := gorm.Open(postgres.Open(connectionInfo), &gorm.Config{})
+func NewDBConnection(DBCfg string) *gorm.DB {
+	db, err := gorm.Open(postgres.Open(DBCfg), &gorm.Config{})
 	if err != nil {
 		log.Fatalf("gorm open database connection error")
 	}
 	db.AutoMigrate(&models.User{})
 
-	return &Manager{db}
+	return db
 }

@@ -12,12 +12,7 @@ type DBCfg struct {
 	user     string `env:"DB_USER"`
 	password string `env:"DB_PASSWORD"`
 	dbName   string `env:"DB_NAME"`
-}
-
-func (c *DBCfg) GetConnectionInfo() string {
-	return fmt.Sprintf(
-		"host=%s port=%d user=%s password=%s dbName=%s sslmode=disable",
-		c.host, c.port, c.user, c.password, c.dbName)
+	DBCfg    string
 }
 
 func NewDBCfg() *DBCfg {
@@ -25,12 +20,19 @@ func NewDBCfg() *DBCfg {
 	if err != nil {
 		panic(err)
 	}
+	host := os.Getenv("DB_HOST")
+	user := os.Getenv("DB_USER")
+	password := os.Getenv("DB_PASSWORD")
+	dbName := os.Getenv("DB_NAME")
+	dbCfg := fmt.Sprintf(
+		"host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbName)
 
 	return &DBCfg{
-		host:     os.Getenv("DB_HOST"),
+		host:     host,
 		port:     port,
-		user:     os.Getenv("DB_USER"),
-		password: os.Getenv("DB_PASSWORD"),
-		dbName:   os.Getenv("DB_NAME"),
+		user:     user,
+		password: password,
+		dbName:  dbName,
+		DBCfg: dbCfg,
 	}
 }
