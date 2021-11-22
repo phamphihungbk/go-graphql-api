@@ -9,7 +9,7 @@ services:
     image: graphql-server
     build:
       context: ./server
-      target: debug
+      target: prod
     container_name: graphql-server
     working_dir: /server
     volumes:
@@ -33,7 +33,5 @@ services:
     volumes:
       - ./postgres/data:/var/lib/postgresql/data
       - ./postgres/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
-    ports:
-    - 5432:5432
     networks:
       - graphql-network
