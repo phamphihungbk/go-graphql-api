@@ -1,4 +1,4 @@
-package database
+package app
 
 import (
 	"github.com/phamphihungbk/go-graphql/src/models"
