@@ -1,0 +1,4 @@
+# Naming Convention: <Action><Resource>
+type Mutation {
+  createUser(input: CreateUserInput!): User!
+}

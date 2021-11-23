@@ -1,0 +1,10 @@
+# Naming Convention: <Action><Resource>Input
+
+input CreateUserInput {
+  """
+  Input for new user
+  """
+  name: String!
+  email: String!
+  password: String!
+}
