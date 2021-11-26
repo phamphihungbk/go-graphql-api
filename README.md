@@ -1,10 +1,18 @@
 # Go GraphQL
 
-🚀 A real world production GraphQL API, built by Go (Golang) + Postgres
+🚀 GraphQL Server built by Go (Golang) + Dependencies Injection with Google Wire
 
 **Flow Chart**
 
 ![flowchart](graphql-go.jpg)
+
+## Project Structure
+
+```bash
+├── config                      # contains all env file for different environments
+├── environment                 # dockerfile
+└── server                      # contains go server
+```
 
 ## Technologies used:
 

@@ -1,8 +1,9 @@
-package server
+package main
 
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 	"github.com/phamphihungbk/go-graphql/config"
 	"log"
 	"os"
