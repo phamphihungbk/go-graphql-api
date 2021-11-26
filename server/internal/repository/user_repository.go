@@ -2,45 +2,49 @@ package repository
 
 import (
 	"gorm.io/gorm"
+	"github.com/phamphihungbk/go-graphql/internal/model"
 )
 
+type User model.User
+
 type UserRepositoryInterface interface {
-	GetModel() UserModel
-	Find(id uint) (UserModel, error)
-	Create(item UserModel) UserModel
-	Update(item UserModel) UserModel
+	GetModel() User
+	Find(id uint) (User, error)
+	Create(item User) User
+	Update(item User) User
 	Delete(id uint) error
 }
 
 type UserRepository struct {
 	UserRepositoryInterface
-	model UserModel
+	model User
 	db    *gorm.DB
 }
 
-func NewUserRepository(db *gorm.DB, model UserModel) *UserRepository {
+func NewUserRepository(db *gorm.DB) *UserRepository {
+	var user *User
 	return &UserRepository{
-		model: model,
+		model: &user,
 		db:    db,
 	}
 }
 
-func (c *UserRepository) GetModel() UserModel {
+func (c *UserRepository) GetModel() User {
 	return c.model
 }
 
-func (c *UserRepository) Find(id uint) (UserModel, error) {
+func (c *UserRepository) Find(id uint) (User, error) {
 	item := c.GetModel()
 	err := c.db.First(item, id).Error
 	return item, err
 }
 
-func (c *UserRepository) Create(item UserModel) UserModel {
+func (c *UserRepository) Create(item User) User {
 	c.db.Create(item)
 	return item
 }
 
-func (c *UserRepository) Update(item UserModel) UserModel {
+func (c *UserRepository) Update(item User) User {
 	c.db.Save(item)
 	return item
 }

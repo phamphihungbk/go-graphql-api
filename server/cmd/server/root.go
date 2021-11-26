@@ -1,12 +1,11 @@
-package main
+package server
 
 import (
 	"fmt"
-	"github.com/joho/godotenv"
+	"github.com/gin-gonic/gin"
 	"github.com/phamphihungbk/go-graphql/config"
 	"log"
 	"os"
-	"github.com/gin-gonic/gin"
 )
 
 type Application struct {
@@ -21,7 +20,7 @@ func NewApplication(appCfg *config.AppCfg, router *gin.Engine) *Application {
 	}
 }
 
-func main() {
+func Execute() {
 	if err := godotenv.Load(); err != nil {
 		log.Fatal("Error loading .env file")
 	}
@@ -32,5 +31,6 @@ func main() {
 		fmt.Printf("Cannot start app: %+v\n", err)
 		os.Exit(1)
 	}
+
 	e.Router.Run(":8080")
 }
