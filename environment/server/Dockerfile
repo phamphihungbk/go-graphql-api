@@ -7,11 +7,15 @@ RUN mkdir -p /server \
     apk add curl \
             git \
             bash \
+            alpine-sdk \
             make && \
     rm -rf /var/cache/apk/*
 
-ENV GOPATH /go
-ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH
+#RUN go get github.com/go-delve/delve/cmd/dlv
+### Run the Delve debugger ###
+#COPY ./dlv.sh /
+#RUN chmod +x /dlv.sh
+#ENTRYPOINT [ "/dlv.sh"]
 
 ###########PRODUCTION IMAGE###################
 

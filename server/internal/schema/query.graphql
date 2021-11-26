@@ -1,8 +1,4 @@
-# Naming Convention: <Action><Resource>
 type Query {
-  """
-  Lookup a user.
-  If no `id` provided, then returns requested user itself.
-  """
+  users: [User]!
   user(id: Int): User!
 }
