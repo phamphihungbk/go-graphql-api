@@ -6,8 +6,6 @@ import (
 	"github.com/phamphihungbk/go-graphql/internal/service"
 )
 
-type User model.User
-
 type UserResolver struct {
 	*service.UserService
 }
@@ -28,7 +26,7 @@ func (r *UserResolver) Query() *QueryResolver {
 	return &QueryResolver{r}
 }
 
-func (r *QueryResolver) User(ctx context.Context, id uint) (User, error) {
+func (r *QueryResolver) User(ctx context.Context, id uint) (model.User, error) {
 	data, err := r.UserService.GetItem(id)
 	return data, err
 }
@@ -37,11 +35,11 @@ func (r *UserResolver) Mutation() *MutationResolver {
 	return &MutationResolver{r}
 }
 
-func (r *MutationResolver) Create(ctx context.Context, user User) User {
+func (r *MutationResolver) Create(ctx context.Context, user model.User) model.User {
 	return r.UserService.Create(user)
 }
 
-func (r *MutationResolver) Update(ctx context.Context, data User) User {
+func (r *MutationResolver) Update(ctx context.Context, data model.User) model.User {
 	return r.UserService.Update(data)
 }
 

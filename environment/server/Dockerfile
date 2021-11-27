@@ -11,6 +11,7 @@ RUN mkdir -p /server \
             make && \
     rm -rf /var/cache/apk/*
 
+RUN go get -u golang.org/x/tools/go/packages
 #RUN go get github.com/go-delve/delve/cmd/dlv
 ### Run the Delve debugger ###
 #COPY ./dlv.sh /
