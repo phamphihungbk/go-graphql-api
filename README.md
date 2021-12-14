@@ -14,6 +14,16 @@
 └── server                      # contains go server
 ```
 
+## Features:
+
+- [x] DI - Google Wire
+- [x] Docker Support
+- [ ] Logging
+- [ ] Dataloader
+- [ ] Caching
+- [ ] Testing
+- [ ] ESLint
+
 ## Technologies used:
 
 - Golang
