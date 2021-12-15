@@ -18,11 +18,11 @@
 
 - [x] DI - Google Wire
 - [x] Docker Support
+- [ ] GoLinter - Staticcheck
 - [ ] Logging
 - [ ] Dataloader
 - [ ] Caching
 - [ ] Testing
-- [ ] ESLint
 
 ## Technologies used:
 

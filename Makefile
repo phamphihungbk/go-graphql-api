@@ -28,11 +28,15 @@ sv-build:
 
 .PHONY: init-packages
 init-packages:
-	docker exec -it graphql-db sh -c "go get -d -v ./..."
+	docker exec -it graphql-server sh -c "go get -d -v ./..."
 
 .PHONY: files-copy
 files-copy:
 	cp ./config/env.dev .env
+
+.PHONY: go-linter
+go-linter:
+	docker exec -it graphql-server sh -c "staticcheck . -explain"
 
 .PHONY: db-list
 db-list:
