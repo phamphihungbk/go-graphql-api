@@ -16,18 +16,18 @@
 
 ## Features:
 
-- [x] DI - Google Wire
+- [x] DI - [Google Wire](https://github.com/google/wire)
 - [x] Docker Support
-- [ ] GoLinter - Staticcheck
+- [ ] Pre commit
+- [ ] Linter - [Go Linter](https://github.com/golangci/golangci-lint)
 - [ ] Logging
 - [ ] Dataloader
 - [ ] Caching
 - [ ] Testing
 
-## Technologies used:
+## Guidelines:
 
-- Golang
-- Docker
-- GraphQL
-- Postgres
-- Wire
+Run go lint to check syntax
+```bash
+make go-lint
+```

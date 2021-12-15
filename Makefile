@@ -34,9 +34,9 @@ init-packages:
 files-copy:
 	cp ./config/env.dev .env
 
-.PHONY: go-linter
-go-linter:
-	docker exec -it graphql-server sh -c "staticcheck . -explain"
+.PHONY: go-lint
+go-lint:
+	docker exec -it graphql-server sh -c "golangci-lint run"
 
 .PHONY: db-list
 db-list:

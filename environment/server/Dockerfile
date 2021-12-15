@@ -1,4 +1,4 @@
-FROM golang:1.15-alpine as debug
+FROM golang:1.17.5-alpine as debug
 
 RUN mkdir -p /server \
     mkdir -p /var/log/app && \
