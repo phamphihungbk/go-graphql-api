@@ -36,7 +36,7 @@ files-copy:
 
 .PHONY: go-lint
 go-lint:
-	docker exec -it graphql-server sh -c "golangci-lint run"
+	docker exec -it graphql-server sh -c "golangci-lint run --fix"
 
 .PHONY: db-list
 db-list:

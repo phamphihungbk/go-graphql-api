@@ -7,9 +7,13 @@ import (
 	"github.com/phamphihungbk/go-graphql/graphql/generated"
 	"github.com/phamphihungbk/go-graphql/internal/resolver"
 	"net/http"
+	"os"
+	"io"
 )
 
 func NewRoute(resolver *resolver.UserResolver) *gin.Engine {
+	f, _ := os.Create("logs/app.log")
+	gin.DefaultWriter = io.MultiWriter(f)
 	r := gin.Default()
 	r.Use(GinContextToContextMiddleware())
 	r.GET("/ping", func(c *gin.Context) {
