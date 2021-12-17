@@ -1,8 +1,8 @@
 package repository
 
 import (
-	"gorm.io/gorm"
 	"github.com/phamphihungbk/go-graphql/internal/model"
+	"gorm.io/gorm"
 )
 
 type UserRepositoryInterface interface {

@@ -17,10 +17,10 @@
 ## Features:
 
 - [x] DI - [Google Wire](https://github.com/google/wire)
+- [x] Logging - [Logrus](https://github.com/Sirupsen/logrus)
+- [x] Linter - [Go Linter](https://github.com/golangci/golangci-lint)
 - [x] Docker Support
 - [ ] Pre commit
-- [ ] Linter - [Go Linter](https://github.com/golangci/golangci-lint)
-- [ ] Logging
 - [ ] Dataloader
 - [ ] Caching
 - [ ] Testing
