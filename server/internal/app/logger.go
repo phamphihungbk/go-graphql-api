@@ -11,7 +11,7 @@ import (
 )
 
 func LoggerToFile() gin.HandlerFunc {
-	fileName := path.Join("", "app.log")
+	fileName := path.Join("logs", "app.log")
 	src, err := os.OpenFile(fileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		fmt.Println("Can not open log file", err)

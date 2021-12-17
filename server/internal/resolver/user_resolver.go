@@ -2,47 +2,49 @@ package resolver
 
 import (
 	"context"
+	"github.com/gin-gonic/gin"
 	"github.com/phamphihungbk/go-graphql/internal/model"
-	"github.com/phamphihungbk/go-graphql/internal/service"
+	"net/http"
 )
 
-type UserResolver struct {
-	*service.UserService
+type User interface {
 }
 
-type QueryResolver struct {
-	*UserResolver
-}
-
-type MutationResolver struct {
-	*UserResolver
-}
-
-func NewUserResolver(userService *service.UserService) *UserResolver {
-	return &UserResolver{userService}
-}
-
-func (r *UserResolver) Query() *QueryResolver {
-	return &QueryResolver{r}
-}
-
-func (r *QueryResolver) User(ctx context.Context, id uint) (model.User, error) {
-	data, err := r.UserService.GetItem(id)
+func (r *QueryResolver) User(ctx *context.Context) (User, error) {
+	param := ctx.Value("user_id")
+	data, err := r.UserService.GetItem(param)
 	return data, err
 }
 
-func (r *UserResolver) Mutation() *MutationResolver {
-	return &MutationResolver{r}
+func (r *QueryResolver) Users(ctx *context.Context) ([]User, error) {
+	params := ctx.Request.URL.Query()
+	data, err := r.UserService.GetAllItems(params)
+	return data, err
 }
 
-func (r *MutationResolver) Create(ctx context.Context, user model.User) model.User {
-	return r.UserService.Create(user)
+func (r *MutationResolver) CreateUser(ctx *context.Context) User {
+	var user model.User
+	if err := ctx.ShouldBindJSON(&user); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return nil
+	}
+	userData := append(userData, user)
+
+	return r.UserService.CreateItem(userData)
 }
 
-func (r *MutationResolver) Update(ctx context.Context, data model.User) model.User {
-	return r.UserService.Update(data)
+func (r *MutationResolver) UpdateUser(ctx *context.Context) User {
+	var user model.User
+	if err := ctx.ShouldBindJSON(&user); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return nil
+	}
+	userData := append(userData, user)
+
+	return r.UserService.UpdateItem(userData)
 }
 
-func (r *MutationResolver) Delete(ctx context.Context, id uint) error {
-	return r.UserService.Delete(id)
+func (r *MutationResolver) DeleteUser(ctx *context.Context) error {
+	param := ctx.Value("user_id")
+	return r.UserService.DeleteItem(param)
 }

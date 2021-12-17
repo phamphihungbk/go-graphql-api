@@ -25,6 +25,9 @@ func NewRoute(resolver *resolver.UserResolver) *gin.Engine {
 
 func graphqlHandler(resolver *resolver.UserResolver) gin.HandlerFunc {
 	h := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: resolver}))
+	h.SetRecoverFunc(func(ctx context.Context, err interface{}) error {
+		return errors.New("Internal server error!")
+	})
 
 	return func(c *gin.Context) {
 		h.ServeHTTP(c.Writer, c.Request)

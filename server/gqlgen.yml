@@ -1,10 +1,11 @@
 schema:
-  - schema/*.graphql
+  - internal/schema/*.graphql
 
 exec:
-  filename: graphql/generated/generated.go
+  filename: internal/graphql/generated/generated.go
   package: generated
 
 resolver:
   type: Resolver
-  filename: internal/resolver/user_resolver.go
+  package: resolver
+  filename: internal/resolver/resolver.go

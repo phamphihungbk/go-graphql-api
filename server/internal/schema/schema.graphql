@@ -1,3 +1,10 @@
+# ========== Query ==========
+type Query {
+  users: [User]!
+  user(id: Int): User!
+}
+
+# ========== Mutation ==========
 type Mutation {
   createUser(input: CreateUserInput!): User!
   updateUser(id: Int!, update: UpdateUser!): User!

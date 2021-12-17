@@ -5,8 +5,13 @@ import (
 	"gorm.io/gorm"
 )
 
+const DefaultPageSize = 20
+
+type ListParametersInterface interface{}
+
 type UserRepositoryInterface interface {
 	GetModel() model.User
+	ListAll(parameters ListParametersInterface) ([]model.User, error)
 	Find(id uint) (model.User, error)
 	Create(item model.User) model.User
 	Update(item model.User) model.User
@@ -21,7 +26,7 @@ type UserRepository struct {
 
 func NewUserRepository(db *gorm.DB) *UserRepository {
 	return &UserRepository{
-		model: model.User{},
+		model: &model.User,
 		db:    db,
 	}
 }
@@ -30,15 +35,26 @@ func (c *UserRepository) GetModel() model.User {
 	return c.model
 }
 
-func (c *UserRepository) Find(id uint) (model.User, error) {
+func (c *UserRepository) ListAll(parameters ListParametersInterface) ([]model.User, error) {
 	item := c.GetModel()
-	err := c.db.First(item, id).Error
-	return item, err
+	query, err := buildParamsQuery(parameters)
+	if err != nil {
+		return []InterfaceEntity{}, err
+	}
+	result := query.Find(item)
+
+	return result.RowsAffected, result.Error
 }
 
-func (c *UserRepository) Create(item model.User) model.User {
-	c.db.Create(item)
-	return item
+func (c *UserRepository) Find(id uint) (model.User, error) {
+	item := c.GetModel()
+	result := c.db.First(item, id)
+	return result.RowsAffected, result.Error
+}
+
+func (c *UserRepository) Create(item model.User) (model.User, error) {
+	result = c.db.Create(item)
+	return result.RowsAffected, result.Error
 }
 
 func (c *UserRepository) Update(item model.User) model.User {
@@ -53,4 +69,16 @@ func (c *UserRepository) Delete(id uint) error {
 	}
 	c.db.Delete(item)
 	return nil
+}
+
+// TODO: enhance offset and pageSize calculation
+func (c *UserRepository) buildParamsQuery(parameters ListParametersInterface) (*gorm.DB, error) {
+	query := c.db
+	pageSize := DefaultPageSize
+	page := 0
+	limit := pageSize
+	offset := page * pageSize
+	query = query.Offset(offset).Limit(limit)
+
+	return query, nil
 }
