@@ -38,10 +38,9 @@ files-copy:
 go-lint:
 	docker exec -it graphql-server sh -c "golangci-lint run --fix --fast"
 
-.PHONY: db-list
-db-list:
-	docker exec -it graphql-db sh -c "psql -l"
-
 # postgres query
 # \c graphql_db connect to db
 # \dt list out all the tables
+# go run github.com/99designs/gqlgen generate
+# docker exec -it graphql-db sh -c "psql -l"
+# wire
