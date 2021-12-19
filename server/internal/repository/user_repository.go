@@ -5,80 +5,74 @@ import (
 	"gorm.io/gorm"
 )
 
-const DefaultPageSize = 20
+type Pagination struct {
+	Limit      int         `json:"limit,omitempty;query:limit"`
+	Page       int         `json:"page,omitempty;query:page"`
+	Sort       string      `json:"sort,omitempty;query:sort"`
+	TotalRows  int64       `json:"total_rows"`
+	TotalPages int         `json:"total_pages"`
+	Rows       interface{} `json:"rows"`
+}
 
-type ListParametersInterface interface{}
-
-type UserRepositoryInterface interface {
-	GetModel() model.User
-	ListAll(parameters ListParametersInterface) ([]model.User, error)
-	Find(id uint) (model.User, error)
-	Create(item model.User) model.User
-	Update(item model.User) model.User
-	Delete(id uint) error
+type IUserRepository interface {
+	ListAll(limit int, page int, sort string) ([]*model.User, error)
+	Find(id int) (*model.User, error)
+	Create(item *model.User) (*model.User, error)
+	Update(item *model.User) *model.User
+	Delete(id int) error
 }
 
 type UserRepository struct {
-	UserRepositoryInterface
-	model model.User
-	db    *gorm.DB
+	db *gorm.DB
 }
 
 func NewUserRepository(db *gorm.DB) *UserRepository {
 	return &UserRepository{
-		model: &model.User,
-		db:    db,
+		db: db,
 	}
 }
 
-func (c *UserRepository) GetModel() model.User {
-	return c.model
-}
-
-func (c *UserRepository) ListAll(parameters ListParametersInterface) ([]model.User, error) {
-	item := c.GetModel()
-	query, err := buildParamsQuery(parameters)
+func (ur *UserRepository) ListAll(limit int, page int, sort string) ([]*model.User, error) {
+	var users []*model.User
+	query := ur.buildParamsQuery(limit, page, sort)
+	err := ur.db.Scopes(query).Find(&users).Error
 	if err != nil {
-		return []InterfaceEntity{}, err
+		return []*model.User{}, err
 	}
-	result := query.Find(item)
 
-	return result.RowsAffected, result.Error
+	return users, nil
 }
 
-func (c *UserRepository) Find(id uint) (model.User, error) {
-	item := c.GetModel()
-	result := c.db.First(item, id)
-	return result.RowsAffected, result.Error
+func (ur *UserRepository) Find(id int) (*model.User, error) {
+	var user *model.User
+	err := ur.db.First(&user, id).Error
+
+	return user, err
 }
 
-func (c *UserRepository) Create(item model.User) (model.User, error) {
-	result = c.db.Create(item)
-	return result.RowsAffected, result.Error
+func (ur *UserRepository) Create(item *model.User) (*model.User, error) {
+	err := ur.db.Create(item).Error
+	return item, err
 }
 
-func (c *UserRepository) Update(item model.User) model.User {
-	c.db.Save(item)
+func (ur *UserRepository) Update(item *model.User) *model.User {
+	ur.db.Save(item)
 	return item
 }
 
-func (c *UserRepository) Delete(id uint) error {
-	item, err := c.Find(id)
+func (ur *UserRepository) Delete(id int) error {
+	item, err := ur.Find(id)
 	if err != nil {
 		return err
 	}
-	c.db.Delete(item)
+	ur.db.Delete(item)
+
 	return nil
 }
 
-// TODO: enhance offset and pageSize calculation
-func (c *UserRepository) buildParamsQuery(parameters ListParametersInterface) (*gorm.DB, error) {
-	query := c.db
-	pageSize := DefaultPageSize
-	page := 0
-	limit := pageSize
-	offset := page * pageSize
-	query = query.Offset(offset).Limit(limit)
-
-	return query, nil
+func (ur *UserRepository) buildParamsQuery(limit int, page int, sort string) func(db *gorm.DB) *gorm.DB {
+	page = (page - 1) * limit
+	return func(db *gorm.DB) *gorm.DB {
+		return ur.db.Offset(page).Limit(limit).Order(sort)
+	}
 }

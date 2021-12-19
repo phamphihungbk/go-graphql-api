@@ -5,45 +5,41 @@ import (
 	"github.com/phamphihungbk/go-graphql/internal/repository"
 )
 
-type UserServiceInterface interface {
-	GetModel() model.User
-	GetAllItems(parameters repository.ListParametersInterface) ([]model.User, error)
-	GetItem(id uint) (model.User, error)
-	CreateItem(item model.User) model.User
-	UpdateItem(item model.User) model.User
-	DeleteItem(id uint) error
+type IUserService interface {
+	GetAllItems(limit int, page int, sort string) ([]*model.User, error)
+	GetItem(id int) (*model.User, error)
+	CreateItem(item *model.User) (*model.User, error)
+	UpdateItem(item *model.User) *model.User
+	DeleteItem(id int) error
 }
 
 type UserService struct {
-	Repository *repository.UserRepository
+	repository repository.IUserRepository
 }
 
-func NewUserService(repository *repository.UserRepository) *UserService {
+func NewUserService(repository repository.IUserRepository) *UserService {
 	return &UserService{repository}
 }
 
-func (c *UserService) GetModel() model.User {
-	return c.Repository.GetModel()
-}
-
-func (c *UserService) GetAllItems(parameters repository.ListParametersInterface) ([]model.User, error) {
-	data, err := c.Repository.ListAll(parameters)
+func (us *UserService) GetAllItems(limit int, page int, sort string) ([]*model.User, error) {
+	data, err := us.repository.ListAll(limit, page, sort)
 	return data, err
 }
 
-func (c *UserService) GetItem(id uint) (model.User, error) {
-	data, err := c.Repository.Find(id)
+func (us *UserService) GetItem(id int) (*model.User, error) {
+	data, err := us.repository.Find(id)
 	return data, err
 }
 
-func (c *UserService) CreateItem(item model.User) model.User {
-	return c.Repository.Create(item)
+func (us *UserService) CreateItem(item *model.User) (*model.User, error) {
+	data, err := us.repository.Create(item)
+	return data, err
 }
 
-func (c *UserService) UpdateItem(item model.User) model.User {
-	return c.Repository.Update(item)
+func (us *UserService) UpdateItem(item *model.User) *model.User {
+	return us.repository.Update(item)
 }
 
-func (c *UserService) DeleteItem(id uint) error {
-	return c.Repository.Delete(id)
+func (us *UserService) DeleteItem(id int) error {
+	return us.repository.Delete(id)
 }

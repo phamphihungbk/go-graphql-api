@@ -1,7 +1,13 @@
+# ========== Root ==========
+schema {
+  query: Query
+#  mutation: Mutation
+}
+
 # ========== Query ==========
 type Query {
-  users: [User]!
-  user(id: Int): User!
+  users(limit: Int = 10, page: Int = 0, sort: String = "Id desc"): [User]!
+  user(id: Int!): User!
 }
 
 # ========== Mutation ==========

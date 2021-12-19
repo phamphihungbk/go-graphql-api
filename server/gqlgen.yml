@@ -6,10 +6,14 @@ exec:
   package: generated
 
 model:
-  filename: internal/graphql/model/models_gen.go
-  package: model
+  filename: internal/graphql/generated/models_gen.go
+  package: generated
 
 resolver:
+  filename: internal/resolver/resolver.go
   type: Resolver
   package: resolver
-  filename: internal/resolver/resolver.go
+
+models:
+  User:
+    model: github.com/phamphihungbk/go-graphql/internal/model.User

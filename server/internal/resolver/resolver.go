@@ -1,25 +1,33 @@
 package resolver
 
 import (
+	"github.com/phamphihungbk/go-graphql/internal/graphql/generated"
 	"github.com/phamphihungbk/go-graphql/internal/service"
 )
 
 type Resolver struct {
-	UserService service.UserService
+	userService service.IUserService
 }
 
-type QueryResolver struct {
+func NewResolver(userService service.IUserService) *Resolver {
+	return &Resolver{userService: userService}
+}
+
+// ========== Query ==========
+
+type queryResolver struct {
 	*Resolver
 }
 
-type MutationResolver struct {
+func (r *Resolver) Query() generated.QueryResolver {
+	return &queryResolver{r}
+}
+
+// ========== Mutation ==========
+type mutationResolver struct {
 	*Resolver
 }
 
-func (r *Resolver) Query() *QueryResolver {
-	return &QueryResolver{r}
-}
-
-func (r *Resolver) Mutation() *MutationResolver {
-	return &MutationResolver{r}
+func (r *Resolver) Mutation() generated.MutationResolver {
+	return &mutationResolver{r}
 }
