@@ -17,9 +17,9 @@ type Pagination struct {
 type IUserRepository interface {
 	ListAll(limit int, page int, sort string) ([]*model.User, error)
 	Find(id int) (*model.User, error)
-	Create(item *model.User) (*model.User, error)
-	Update(item *model.User) *model.User
-	Delete(id int) error
+	Create(input model.CreateUserInput) (*model.User, error)
+	Update(id int, input model.UpdateUserInput) (*model.User, error)
+	Delete(id int) (bool, error)
 }
 
 type UserRepository struct {
@@ -50,24 +50,29 @@ func (ur *UserRepository) Find(id int) (*model.User, error) {
 	return user, err
 }
 
-func (ur *UserRepository) Create(item *model.User) (*model.User, error) {
-	err := ur.db.Create(item).Error
-	return item, err
+func (ur *UserRepository) Create(input model.CreateUserInput) (*model.User, error) {
+	err := ur.db.Create(input).Error
+	return nil, err
 }
 
-func (ur *UserRepository) Update(item *model.User) *model.User {
-	ur.db.Save(item)
-	return item
+func (ur *UserRepository) Update(id int, input model.UpdateUserInput) (*model.User, error) {
+	user, err := ur.Find(id)
+	if err != nil {
+		return &model.User{}, err
+	}
+	ur.db.Model(user).Updates(input)
+
+	return user, nil
 }
 
-func (ur *UserRepository) Delete(id int) error {
+func (ur *UserRepository) Delete(id int) (bool, error) {
 	item, err := ur.Find(id)
 	if err != nil {
-		return err
+		return false, err
 	}
 	ur.db.Delete(item)
 
-	return nil
+	return true, nil
 }
 
 func (ur *UserRepository) buildParamsQuery(limit int, page int, sort string) func(db *gorm.DB) *gorm.DB {

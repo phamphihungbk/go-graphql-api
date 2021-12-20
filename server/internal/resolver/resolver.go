@@ -14,7 +14,6 @@ func NewResolver(userService service.IUserService) *Resolver {
 }
 
 // ========== Query ==========
-
 type queryResolver struct {
 	*Resolver
 }

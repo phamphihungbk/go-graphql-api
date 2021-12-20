@@ -17,3 +17,7 @@ resolver:
 models:
   User:
     model: github.com/phamphihungbk/go-graphql/internal/model.User
+  CreateUserInput:
+    model: github.com/phamphihungbk/go-graphql/internal/model.CreateUserInput
+  UpdateUserInput:
+    model: github.com/phamphihungbk/go-graphql/internal/model.UpdateUserInput

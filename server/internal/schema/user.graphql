@@ -13,7 +13,7 @@ input CreateUserInput {
   password: String!
 }
 
-input UpdateUser {
+input UpdateUserInput {
   name: String!
   email: String!
   password: String!

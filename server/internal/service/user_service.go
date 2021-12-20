@@ -8,9 +8,9 @@ import (
 type IUserService interface {
 	GetAllItems(limit int, page int, sort string) ([]*model.User, error)
 	GetItem(id int) (*model.User, error)
-	CreateItem(item *model.User) (*model.User, error)
-	UpdateItem(item *model.User) *model.User
-	DeleteItem(id int) error
+	CreateItem(input model.CreateUserInput) (*model.User, error)
+	UpdateItem(id int, input model.UpdateUserInput) (*model.User, error)
+	DeleteItem(id int) (bool, error)
 }
 
 type UserService struct {
@@ -31,15 +31,14 @@ func (us *UserService) GetItem(id int) (*model.User, error) {
 	return data, err
 }
 
-func (us *UserService) CreateItem(item *model.User) (*model.User, error) {
-	data, err := us.repository.Create(item)
-	return data, err
+func (us *UserService) CreateItem(input model.CreateUserInput) (*model.User, error) {
+	return us.repository.Create(input)
 }
 
-func (us *UserService) UpdateItem(item *model.User) *model.User {
-	return us.repository.Update(item)
+func (us *UserService) UpdateItem(id int, input model.UpdateUserInput) (*model.User, error) {
+	return us.repository.Update(id, input)
 }
 
-func (us *UserService) DeleteItem(id int) error {
+func (us *UserService) DeleteItem(id int) (bool, error) {
 	return us.repository.Delete(id)
 }
