@@ -7,6 +7,7 @@ import (
 	"github.com/phamphihungbk/go-graphql/config"
 	"github.com/phamphihungbk/go-graphql/internal/app"
 	"github.com/phamphihungbk/go-graphql/internal/repository"
+	"github.com/phamphihungbk/go-graphql/internal/resolver"
 	"github.com/phamphihungbk/go-graphql/internal/service"
 )
 
@@ -15,6 +16,7 @@ func InitializeApp(dbCfg *config.DBCfg) (*Application, error) {
 		app.NewDBConnection,
 		repository.NewUserRepository,
 		service.NewUserService,
+		resolver.NewResolver,
 		app.NewRoute,
 		NewApplication,
 	)

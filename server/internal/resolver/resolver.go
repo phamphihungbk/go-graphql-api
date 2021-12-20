@@ -6,10 +6,10 @@ import (
 )
 
 type Resolver struct {
-	userService service.IUserService
+	userService *service.UserService
 }
 
-func NewResolver(userService service.IUserService) *Resolver {
+func NewResolver(userService *service.UserService) *Resolver {
 	return &Resolver{userService: userService}
 }
 

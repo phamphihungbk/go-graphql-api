@@ -14,10 +14,10 @@ type IUserService interface {
 }
 
 type UserService struct {
-	repository repository.IUserRepository
+	repository *repository.UserRepository
 }
 
-func NewUserService(repository repository.IUserRepository) *UserService {
+func NewUserService(repository *repository.UserRepository) *UserService {
 	return &UserService{repository}
 }
 

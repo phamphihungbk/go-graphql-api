@@ -8,27 +8,24 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/phamphihungbk/go-graphql/internal/graphql/generated"
 	"github.com/phamphihungbk/go-graphql/internal/resolver"
-	"github.com/phamphihungbk/go-graphql/internal/service"
 )
 
-func NewRoute(userService service.IUserService) *gin.Engine {
+func NewRoute(resolvers *resolver.Resolver) *gin.Engine {
 	r := gin.Default()
 	r.Use(GinContextToContextMiddleware())
 	r.Use(LoggerToFile())
 	r.GET("/ping", func(c *gin.Context) {
 		c.String(http.StatusOK, "pong")
 	})
-	r.POST("/query", graphqlHandler(userService))
+	r.POST("/query", graphqlHandler(resolvers))
 	r.GET("/", playgroundHandler("/query"))
 
 	return r
 }
 
-func graphqlHandler(userService service.IUserService) gin.HandlerFunc {
+func graphqlHandler(resolvers *resolver.Resolver) gin.HandlerFunc {
 	conf := generated.Config{
-		Resolvers: resolver.NewResolver(
-			userService,
-		),
+		Resolvers: resolvers,
 	}
 	exec := generated.NewExecutableSchema(conf)
 	h := handler.NewDefaultServer(exec)
