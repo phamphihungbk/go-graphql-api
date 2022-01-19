@@ -40,6 +40,10 @@ issues:
 
 run:
   skip-dirs:
-    - cache/*
+    - /cache/
+    - /logs/
+
+  skip-files:
+    - tools
 
   skip-dirs-use-default: true
