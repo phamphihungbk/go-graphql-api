@@ -6,7 +6,7 @@
 - [x] Logging - [Logrus](https://github.com/Sirupsen/logrus)
 - [x] Linter - [Go Linter](https://github.com/golangci/golangci-lint)
 - [x] Docker Support
-- [ ] Pre commit
+- [x] Pre commit
 - [ ] Dataloader
 - [ ] Caching
 - [ ] Testing
