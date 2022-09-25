@@ -1,20 +1,26 @@
 # ========== User Schema ==========
 type User {
   id: Int!
-  name: String!
+  name: String
   email: String!
   password: String!
 }
 
-# ========== Input ==========
-input CreateUserInput {
-  name: String!
+# ========== Create Input ==========
+input CreateInput {
   email: String!
   password: String!
+  name: String
 }
 
-input UpdateUserInput {
-  name: String!
+# ========== Update Input ==========
+input UpdateInput {
+  email: String!
+  name: String
+}
+
+# ========== Login Input ==========
+input LoginInput {
   email: String!
   password: String!
 }

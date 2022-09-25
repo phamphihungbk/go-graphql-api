@@ -7,12 +7,13 @@ schema {
 # ========== Query ==========
 type Query {
   users(limit: Int! = 10, page: Int! = 0, sort: String! = "Id desc"): [User]!
-  user(id: Int!): User!
+  user(email: String!): User!
+  login(input: LoginInput!): User!
 }
 
 # ========== Mutation ==========
 type Mutation {
-  createUser(input: CreateUserInput!): User!
-  updateUser(id: Int!, update: UpdateUserInput!): User!
-  deleteUser(id: Int!): Boolean!
+  createUser(input: CreateInput!): User!
+  updateUser(input: UpdateInput!): User!
+  deleteUser(email: String!): Boolean!
 }
