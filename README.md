@@ -11,7 +11,15 @@
 - [ ] Caching
 - [ ] Testing
 
-## Installation
+## Pre-commit
+
+To install pre-commit simply run inside the shell:
+
+```bash
+pre-commit install
+```
+
+pre-commit is very useful to check your code before publishing it. It's configured using .pre-commit-config.yaml file.
 
 ### Run
 
