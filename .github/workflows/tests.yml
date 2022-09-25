@@ -1,22 +1,20 @@
 name: Testing graphql_server
 
-on: [ push, pull_request ]
+on: [ push ]
 
 jobs:
-  build:
+  golangci:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+
       - name: Setup Go
-          uses: actions/setup-go@v2
-          with:
-            go-version: '1.14.0'
+        uses: actions/setup-go@v3
+        with:
+          go-version: '1.17.0'
 
-      - name: Install dependencies
-          run: |
-            go version
-            go get -u golang.org/x/lint/golint
-
-      - name: Run lint
-          run: |
-            golint -c server/.golangci.yml
+      - name: Run Golang Lint
+        uses: golangci/golangci-lint-action@v3
+        with:
+          version: v1.29
+          working-directory: server/
