@@ -6,12 +6,20 @@
 - [x] Logging - [Logrus](https://github.com/Sirupsen/logrus)
 - [x] Linter - [Go Linter](https://github.com/golangci/golangci-lint)
 - [x] Docker Support
-- [ ] Pre commit
+- [x] Pre commit
 - [ ] Dataloader
 - [ ] Caching
 - [ ] Testing
 
-## Installation
+## Pre-commit
+
+To install pre-commit simply run inside the shell:
+
+```bash
+pre-commit install
+```
+
+pre-commit is very useful to check your code before publishing it. It's configured using .pre-commit-config.yaml file.
 
 ### Run
 
