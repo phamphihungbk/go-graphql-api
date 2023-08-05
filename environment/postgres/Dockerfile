@@ -1,5 +1,5 @@
-FROM postgres:9.6.22-stretch
+FROM postgres:15.3-alpine
 
-RUN apt-get update && apt-get install -y postgresql-contrib
+RUN apk update && apk add postgresql-contrib
 
 CMD ["postgres"]

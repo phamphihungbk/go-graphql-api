@@ -32,7 +32,7 @@ func NewDBCfg() *DBCfg {
 		port:     port,
 		user:     user,
 		password: password,
-		dbName:  dbName,
-		DBCfg: dbCfg,
+		dbName:   dbName,
+		DBCfg:    dbCfg,
 	}
 }

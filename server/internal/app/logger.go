@@ -27,7 +27,7 @@ func LoggerToFile() gin.HandlerFunc {
 		endTime := time.Now()
 		latencyTime := endTime.Sub(startTime)
 		reqMethod := c.Request.Method
-		reqUri := c.Request.RequestURI
+		reqURL := c.Request.RequestURI
 		statusCode := c.Writer.Status()
 		clientIP := c.ClientIP()
 		logger.Infof("| %3d | %13v | %15s | %s | %s |",
@@ -35,7 +35,7 @@ func LoggerToFile() gin.HandlerFunc {
 			latencyTime,
 			clientIP,
 			reqMethod,
-			reqUri,
+			reqURL,
 		)
 	}
 }

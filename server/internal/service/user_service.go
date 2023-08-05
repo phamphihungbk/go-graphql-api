@@ -1,44 +1,82 @@
 package service
 
 import (
-	"github.com/phamphihungbk/go-graphql/internal/model"
-	"github.com/phamphihungbk/go-graphql/internal/repository"
+	"errors"
+	"github.com/phamphihungbk/go-graphql-api/internal/model"
+	"github.com/phamphihungbk/go-graphql-api/internal/repository"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type IUserService interface {
-	GetAllItems(limit int, page int, sort string) ([]*model.User, error)
-	GetItem(id int) (*model.User, error)
-	CreateItem(input model.CreateUserInput) (*model.User, error)
-	UpdateItem(id int, input model.UpdateUserInput) (*model.User, error)
-	DeleteItem(id int) (bool, error)
+	GetAllUsers(limit int, page int, sort string) (*model.UserConnection, error)
+	GetUser(email string) (*model.User, error)
+	IssueToken(payload model.LoginPayload) (*model.AccessToken, error)
+	CreateUser(payload model.CreateUserPayload) (*model.User, error)
+	UpdateUser(payload model.UpdateUserPayload) (*model.User, error)
+	DeleteUser(email string) (bool, error)
 }
 
 type UserService struct {
-	repository *repository.UserRepository
+	repository   *repository.UserRepository
+	tokenService *TokenService
 }
 
-func NewUserService(repository *repository.UserRepository) *UserService {
-	return &UserService{repository}
+func NewUserService(repository *repository.UserRepository, tokenService *TokenService) *UserService {
+	return &UserService{repository, tokenService}
 }
 
-func (us *UserService) GetAllItems(limit int, page int, sort string) ([]*model.User, error) {
-	data, err := us.repository.ListAll(limit, page, sort)
-	return data, err
+func (s *UserService) GetAllItems(limit int, page int, sort string) (*model.UserConnection, error) {
+	return s.repository.GetAll(limit, page, sort)
 }
 
-func (us *UserService) GetItem(id int) (*model.User, error) {
-	data, err := us.repository.Find(id)
-	return data, err
+func (s *UserService) GetUser(email string) (*model.User, error) {
+	return s.repository.FindByEmail(email)
 }
 
-func (us *UserService) CreateItem(input model.CreateUserInput) (*model.User, error) {
-	return us.repository.Create(input)
+func (s *UserService) IssueToken(payload model.LoginPayload) (*model.AccessToken, error) {
+	user, err := s.FindByEmail(payload.Email)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, err := checkPassword(payload.Password, user.Password); err != nil {
+		return nil, err
+	}
+
+	token := s.tokenService.generate(user)
+
+	return &model.AccessToken{token}, nil
 }
 
-func (us *UserService) UpdateItem(id int, input model.UpdateUserInput) (*model.User, error) {
-	return us.repository.Update(id, input)
+func (s *UserService) CreateUser(payload model.CreateUserPayload) (*model.User, error) {
+	password, err := hashPassword(payload.Password)
+	if err != nil {
+		return nil, err
+	}
+	payload.Password = password
+
+	return s.repository.Create(payload)
 }
 
-func (us *UserService) DeleteItem(id int) (bool, error) {
-	return us.repository.Delete(id)
+func (s *UserService) UpdateUser(payload model.UpdateUserPayload) (*model.User, error) {
+	return s.repository.Update(payload)
+}
+
+func (s *UserService) DeleteUser(email string) (bool, error) {
+	return s.repository.Delete(email)
+}
+
+func hashPassword(password string) (string, error) {
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+	return string(bytes), err
+}
+
+func checkPassword(password string, hash string) (bool, error) {
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+
+	if err == nil {
+		return false, errors.New("division by zero")
+	}
+
+	return true, nil
 }

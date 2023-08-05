@@ -1,14 +1,15 @@
-//+build wireinject
+//go:build wireinject
+// +build wireinject
 
 package server
 
 import (
 	"github.com/google/wire"
-	"github.com/phamphihungbk/go-graphql/config"
-	"github.com/phamphihungbk/go-graphql/internal/app"
-	"github.com/phamphihungbk/go-graphql/internal/repository"
-	"github.com/phamphihungbk/go-graphql/internal/resolver"
-	"github.com/phamphihungbk/go-graphql/internal/service"
+	"github.com/phamphihungbk/go-graphql-api/config"
+	"github.com/phamphihungbk/go-graphql-api/internal/app"
+	"github.com/phamphihungbk/go-graphql-api/internal/repository"
+	"github.com/phamphihungbk/go-graphql-api/internal/resolver"
+	"github.com/phamphihungbk/go-graphql-api/internal/service"
 )
 
 func InitializeApp(dbCfg *config.DBCfg) (*Application, error) {

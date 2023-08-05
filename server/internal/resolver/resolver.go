@@ -1,8 +1,8 @@
 package resolver
 
 import (
-	"github.com/phamphihungbk/go-graphql/internal/graphql/generated"
-	"github.com/phamphihungbk/go-graphql/internal/service"
+	"github.com/phamphihungbk/go-graphql-api/internal/graphql/generated"
+	"github.com/phamphihungbk/go-graphql-api/internal/service"
 )
 
 type Resolver struct {

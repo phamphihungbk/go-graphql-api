@@ -2,11 +2,12 @@ package server
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
-	"github.com/phamphihungbk/go-graphql/config"
 	"log"
 	"os"
+
+	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
+	"github.com/phamphihungbk/go-graphql-api/config"
 )
 
 type Application struct {

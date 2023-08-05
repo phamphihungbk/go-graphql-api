@@ -6,8 +6,8 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/gin-gonic/gin"
-	"github.com/phamphihungbk/go-graphql/internal/graphql/generated"
-	"github.com/phamphihungbk/go-graphql/internal/resolver"
+	"github.com/phamphihungbk/go-graphql-api/internal/graphql/generated"
+	"github.com/phamphihungbk/go-graphql-api/internal/resolver"
 )
 
 func NewRoute(resolvers *resolver.Resolver) *gin.Engine {

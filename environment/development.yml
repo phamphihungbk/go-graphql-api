@@ -35,6 +35,6 @@ services:
       - ./postgres/data:/var/lib/postgresql/data
       - ./postgres/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
     ports:
-    - 5432:5432
+    - 8081:5432
     networks:
       - graphql-network
