@@ -1,8 +1,9 @@
 package service
 
 import (
-	jwt "github.com/golang-jwt/jwt/v5"
-	"github.com/phamphihungbk/go-graphql/internal/model"
+	"fmt"
+	"github.com/golang-jwt/jwt/v5"
+	"github.com/phamphihungbk/go-graphql-api/internal/model"
 	"time"
 )
 
@@ -14,8 +15,8 @@ const (
 )
 
 type ITokenService interface {
-	generate() (Token, error)
-	validate() error
+	create(user *model.User) (string, error)
+	validate(tokenString string) (jwt.MapClaims, error)
 }
 
 type TokenService struct {
@@ -25,12 +26,12 @@ func NewTokenService() *TokenService {
 	return &TokenService{}
 }
 
-func (s *TokenService) generate(user *model.User) string {
+func (s *TokenService) create(user *model.User) (string, error) {
 	issuedTime := time.Now().Unix()
 	expiredTime := issuedTime + ExpiredInterval
 
 	token := jwt.NewWithClaims(
-		jwt.SigningMethodES256,
+		jwt.SigningMethodHS256,
 		jwt.MapClaims{
 			"iss":   Issuer,
 			"sub":   user.ID,
@@ -45,6 +46,20 @@ func (s *TokenService) generate(user *model.User) string {
 	return token.SignedString(PrivateKey)
 }
 
-func (s *TokenService) validate() error {
-	return nil
+func (s *TokenService) validate(tokenString string) (jwt.MapClaims, error) {
+	var hmacSampleSecret []byte
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
+		}
+
+		return hmacSampleSecret, nil
+	})
+
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if ok && token.Valid {
+		return claims, nil
+	}
+
+	return nil, err
 }

@@ -8,7 +8,7 @@ import (
 )
 
 type IUserService interface {
-	GetAllUsers(limit int, page int, sort string) (*model.UserConnection, error)
+	GetAllUsers(limit int, page int, sort string) (*model.UsersConnection, error)
 	GetUser(email string) (*model.User, error)
 	IssueToken(payload model.LoginPayload) (*model.AccessToken, error)
 	CreateUser(payload model.CreateUserPayload) (*model.User, error)
@@ -25,7 +25,7 @@ func NewUserService(repository *repository.UserRepository, tokenService *TokenSe
 	return &UserService{repository, tokenService}
 }
 
-func (s *UserService) GetAllItems(limit int, page int, sort string) (*model.UserConnection, error) {
+func (s *UserService) GetAllUsers(limit int, page int, sort string) (*model.UsersConnection, error) {
 	return s.repository.GetAll(limit, page, sort)
 }
 
@@ -34,7 +34,7 @@ func (s *UserService) GetUser(email string) (*model.User, error) {
 }
 
 func (s *UserService) IssueToken(payload model.LoginPayload) (*model.AccessToken, error) {
-	user, err := s.FindByEmail(payload.Email)
+	user, err := s.repository.FindByEmail(payload.Email)
 	if err != nil {
 		return nil, err
 	}
@@ -43,9 +43,13 @@ func (s *UserService) IssueToken(payload model.LoginPayload) (*model.AccessToken
 		return nil, err
 	}
 
-	token := s.tokenService.generate(user)
+	token, err := s.tokenService.create(user)
 
-	return &model.AccessToken{token}, nil
+	if err != nil {
+		return nil, err
+	}
+
+	return &model.AccessToken{Token: token}, nil
 }
 
 func (s *UserService) CreateUser(payload model.CreateUserPayload) (*model.User, error) {

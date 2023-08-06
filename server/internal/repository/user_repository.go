@@ -6,7 +6,7 @@ import (
 )
 
 type IUserRepository interface {
-	GetAll(limit int, page int, sort string) ([]*model.User, error)
+	GetAll(limit int, page int, sort string) (*model.UsersConnection, error)
 	FindByEmail(email string) (*model.User, error)
 	Create(input model.CreateUserPayload) (*model.User, error)
 	Update(input model.UpdateUserPayload) (*model.User, error)
@@ -23,17 +23,17 @@ func NewUserRepository(db *gorm.DB) *UserRepository {
 	}
 }
 
-func (r *UserRepository) GetAll(limit int, page int, sort string) (*model.UserConnection, error) {
+func (r *UserRepository) GetAll(limit int, page int, sort string) (*model.UsersConnection, error) {
 	var users []*model.User
 	query := paginate(limit, page, sort)
 	err := r.db.Scopes(query).Find(&users).Error
 	pageInfo := &model.PageInfo{limit, page, sort}
 
 	if err != nil {
-		return &model.UserConnection{nil, pageInfo}, err
+		return &model.UsersConnection{PageInfo: pageInfo}, err
 	}
 
-	return &model.UserConnection{users, pageInfo}, nil
+	return &model.UsersConnection{Edges: users, PageInfo: pageInfo}, nil
 }
 
 func (r *UserRepository) FindByEmail(email string) (*model.User, error) {
