@@ -15,7 +15,7 @@ services:
     volumes:
       - ../server:/server
       - ../.env:/server/.env
-      - ../server/cache:/go
+      - ../server/vendor:/go
     ports:
       - 8080:8080
     tty: true

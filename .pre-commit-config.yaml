@@ -7,5 +7,6 @@ repos:
 #        entry: gocyclo -over=15 server/...
       - id: golangci-lint
         name: go lint
-        args: ['--config=server/.golangci.yml']
+        entry: golangci-lint run server/...
+#        args: ['--config=server/.golangci.yml']
 #      - id: go-unit-tests #to run unit test before push to git

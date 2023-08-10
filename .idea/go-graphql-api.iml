@@ -6,7 +6,7 @@
       <excludeFolder url="file://$MODULE_DIR$/.idea/dataSources" />
       <excludeFolder url="file://$MODULE_DIR$/environment/postgres/data" />
       <excludeFolder url="file://$MODULE_DIR$/server/cache" />
-      <excludeFolder url="file://$MODULE_DIR$/server/logs" />
+      <excludeFolder url="file://$MODULE_DIR$/logs" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
