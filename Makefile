@@ -8,7 +8,7 @@ up: ## start docker instances
 
 .PHONY: build
 build: ## build docker images
-	cp ./config/env.dev .env
+	cp ./env.dev .env
 	docker-compose -f ./environment/development.yml --env-file .env build
 
 .PHONY: down
@@ -29,7 +29,7 @@ graphql-generate: ## generate graphql schema from gqlgen config
 
 .PHONY: sv-wire
 sv-wire: ## generate wire
-	docker exec -it graphql-server sh -c "go generate ./..."
+	docker exec -it graphql-server sh -c "go run github.com/google/wire/cmd/wire"
 
 .PHONY: sv-generate
 sv-generate: ## generate google wire, graphql schema
@@ -49,6 +49,10 @@ package-upgrade: ## upgrade packages with PACKAGE=
 
 .PHONY: lint
 lint: ## run lint
+	docker exec -it graphql-server sh -c "golangci-lint run ./..."
+
+.PHONY: lint-fix
+lint-fix: ## run lint fix
 	docker exec -it graphql-server sh -c "golangci-lint run --fix --fast"
 
 help:

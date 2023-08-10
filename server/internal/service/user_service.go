@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+
 	"github.com/phamphihungbk/go-graphql-api/internal/model"
 	"github.com/phamphihungbk/go-graphql-api/internal/repository"
 	"golang.org/x/crypto/bcrypt"
@@ -17,12 +18,11 @@ type IUserService interface {
 }
 
 type UserService struct {
-	repository   *repository.UserRepository
-	tokenService *TokenService
+	repository *repository.UserRepository
 }
 
-func NewUserService(repository *repository.UserRepository, tokenService *TokenService) *UserService {
-	return &UserService{repository, tokenService}
+func NewUserService(repository *repository.UserRepository) *UserService {
+	return &UserService{repository: repository}
 }
 
 func (s *UserService) GetAllUsers(limit int, page int, sort string) (*model.UsersConnection, error) {
@@ -43,7 +43,7 @@ func (s *UserService) IssueToken(payload model.LoginPayload) (*model.AccessToken
 		return nil, err
 	}
 
-	token, err := s.tokenService.create(user)
+	token, err := CreateToken(user)
 
 	if err != nil {
 		return nil, err

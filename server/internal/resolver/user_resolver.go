@@ -3,8 +3,6 @@ package resolver
 import (
 	"context"
 
-	"github.com/phamphihungbk/go-graphql-api/internal/service"
-
 	"github.com/phamphihungbk/go-graphql-api/internal/model"
 )
 

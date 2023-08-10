@@ -15,4 +15,4 @@ resolver:
   package: resolver
 
 autobind:
-  - "github.com/phamphihungbk/go-graphql-api/internal/model"
+  - "github.com/phamphihungbk/go-graphql-api-api/internal/model"

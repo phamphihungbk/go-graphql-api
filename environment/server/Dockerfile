@@ -7,7 +7,9 @@ RUN mkdir -p /server \
     apk add curl \
             git \
             bash \
-            alpine-sdk \
+            build-essential \
+            gcc \
+            libc-dev \
             make && \
     rm -rf /var/cache/apk/*
 

@@ -2,9 +2,10 @@ package service
 
 import (
 	"fmt"
+	"time"
+
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/phamphihungbk/go-graphql-api/internal/model"
-	"time"
 )
 
 const (
@@ -14,19 +15,7 @@ const (
 	PrivateKey      string = "private key"
 )
 
-type ITokenService interface {
-	create(user *model.User) (string, error)
-	validate(tokenString string) (jwt.MapClaims, error)
-}
-
-type TokenService struct {
-}
-
-func NewTokenService() *TokenService {
-	return &TokenService{}
-}
-
-func (s *TokenService) create(user *model.User) (string, error) {
+func CreateToken(user *model.User) (string, error) {
 	issuedTime := time.Now().Unix()
 	expiredTime := issuedTime + ExpiredInterval
 
@@ -46,7 +35,7 @@ func (s *TokenService) create(user *model.User) (string, error) {
 	return token.SignedString(PrivateKey)
 }
 
-func (s *TokenService) validate(tokenString string) (jwt.MapClaims, error) {
+func ValidateToken(tokenString string) (jwt.MapClaims, error) {
 	var hmacSampleSecret []byte
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
@@ -57,9 +46,48 @@ func (s *TokenService) validate(tokenString string) (jwt.MapClaims, error) {
 	})
 
 	claims, ok := token.Claims.(jwt.MapClaims)
-	if ok && token.Valid {
-		return claims, nil
+
+	if !ok {
+		return nil, err
 	}
 
-	return nil, err
+	if !token.Valid {
+		return nil, err
+	}
+
+	if !isExpiredToken(claims) {
+		return nil, err
+	}
+
+	if !isValidAudition(claims) {
+		return nil, err
+	}
+
+	return claims, nil
+}
+
+func isExpiredToken(claims jwt.MapClaims) bool {
+	iat := claims["iat"].(int64)
+	exp := claims["exp"].(int64)
+	now := time.Now().Unix()
+
+	if iat > exp {
+		return false
+	}
+
+	if now > exp {
+		return false
+	}
+
+	return true
+}
+
+func isValidAudition(claims jwt.MapClaims) bool {
+	aud := claims["aud"].(string)
+
+	if aud == Audition {
+		return true
+	}
+
+	return false
 }

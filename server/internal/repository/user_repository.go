@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"github.com/phamphihungbk/go-graphql-api/internal/app"
 	"github.com/phamphihungbk/go-graphql-api/internal/model"
 	"gorm.io/gorm"
 )
@@ -14,19 +15,19 @@ type IUserRepository interface {
 }
 
 type UserRepository struct {
-	db *gorm.DB
+	connection *app.DatabaseConnection
 }
 
-func NewUserRepository(db *gorm.DB) *UserRepository {
+func NewUserRepository(connection *app.DatabaseConnection) *UserRepository {
 	return &UserRepository{
-		db: db,
+		connection: connection,
 	}
 }
 
 func (r *UserRepository) GetAll(limit int, page int, sort string) (*model.UsersConnection, error) {
 	var users []*model.User
 	query := paginate(limit, page, sort)
-	err := r.db.Scopes(query).Find(&users).Error
+	err := r.connection.DB.Scopes(query).Find(&users).Error
 	pageInfo := &model.PageInfo{limit, page, sort}
 
 	if err != nil {
@@ -38,13 +39,13 @@ func (r *UserRepository) GetAll(limit int, page int, sort string) (*model.UsersC
 
 func (r *UserRepository) FindByEmail(email string) (*model.User, error) {
 	var user = &model.User{Email: email}
-	err := r.db.Where(&user).First(&user).Error
+	err := r.connection.DB.Where(&user).First(&user).Error
 
 	return user, err
 }
 
 func (r *UserRepository) Create(input model.CreateUserPayload) (*model.User, error) {
-	err := r.db.Create(input).Error
+	err := r.connection.DB.Create(input).Error
 	return nil, err
 }
 
@@ -53,7 +54,7 @@ func (r *UserRepository) Update(input model.UpdateUserPayload) (*model.User, err
 	if err != nil {
 		return &model.User{}, err
 	}
-	r.db.Model(user).Updates(input)
+	r.connection.DB.Model(user).Updates(input)
 
 	return user, nil
 }
@@ -63,7 +64,7 @@ func (r *UserRepository) Delete(email string) (bool, error) {
 	if err != nil {
 		return false, err
 	}
-	r.db.Delete(item)
+	r.connection.DB.Delete(item)
 
 	return true, nil
 }
