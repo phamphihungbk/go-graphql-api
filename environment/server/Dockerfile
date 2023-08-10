@@ -1,4 +1,4 @@
-FROM golang:1.17.5-alpine as debug
+FROM golang:1.20.7-alpine as debug
 
 RUN mkdir -p /server \
     mkdir -p /var/log/app && \
@@ -7,17 +7,18 @@ RUN mkdir -p /server \
     apk add curl \
             git \
             bash \
-            alpine-sdk \
+            build-essential \
+            gcc \
+            libc-dev \
             make && \
     rm -rf /var/cache/apk/*
 
-RUN go get -u golang.org/x/tools/go/packages
 #RUN go get github.com/go-delve/delve/cmd/dlv
-### Run the Delve debugger ###
 #COPY ./dlv.sh /
+### Run the Delve debugger ###
 #RUN chmod +x /dlv.sh
 #ENTRYPOINT [ "/dlv.sh"]
 
 ###########PRODUCTION IMAGE###################
 
-FROM golang:1.15-alpine as prod
+FROM golang:1.20.7-alpine as prod

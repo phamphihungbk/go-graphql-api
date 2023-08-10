@@ -1,83 +1,77 @@
 package repository
 
 import (
-	"github.com/phamphihungbk/go-graphql/internal/model"
+	"github.com/phamphihungbk/go-graphql-api/internal/app"
+	"github.com/phamphihungbk/go-graphql-api/internal/model"
 	"gorm.io/gorm"
 )
 
-type Pagination struct {
-	Limit      int         `json:"limit,omitempty;query:limit"`
-	Page       int         `json:"page,omitempty;query:page"`
-	Sort       string      `json:"sort,omitempty;query:sort"`
-	TotalRows  int64       `json:"total_rows"`
-	TotalPages int         `json:"total_pages"`
-	Rows       interface{} `json:"rows"`
-}
-
 type IUserRepository interface {
-	ListAll(limit int, page int, sort string) ([]*model.User, error)
-	Find(id int) (*model.User, error)
-	Create(input model.CreateUserInput) (*model.User, error)
-	Update(id int, input model.UpdateUserInput) (*model.User, error)
-	Delete(id int) (bool, error)
+	GetAll(limit int, page int, sort string) (*model.UsersConnection, error)
+	FindByEmail(email string) (*model.User, error)
+	Create(input model.CreateUserPayload) (*model.User, error)
+	Update(input model.UpdateUserPayload) (*model.User, error)
+	Delete(email string) (bool, error)
 }
 
 type UserRepository struct {
-	db *gorm.DB
+	connection *app.DatabaseConnection
 }
 
-func NewUserRepository(db *gorm.DB) *UserRepository {
+func NewUserRepository(connection *app.DatabaseConnection) *UserRepository {
 	return &UserRepository{
-		db: db,
+		connection: connection,
 	}
 }
 
-func (ur *UserRepository) ListAll(limit int, page int, sort string) ([]*model.User, error) {
+func (r *UserRepository) GetAll(limit int, page int, sort string) (*model.UsersConnection, error) {
 	var users []*model.User
-	query := ur.buildParamsQuery(limit, page, sort)
-	err := ur.db.Scopes(query).Find(&users).Error
+	query := paginate(limit, page, sort)
+	err := r.connection.DB.Scopes(query).Find(&users).Error
+	pageInfo := &model.PageInfo{limit, page, sort}
+
 	if err != nil {
-		return []*model.User{}, err
+		return &model.UsersConnection{PageInfo: pageInfo}, err
 	}
 
-	return users, nil
+	return &model.UsersConnection{Edges: users, PageInfo: pageInfo}, nil
 }
 
-func (ur *UserRepository) Find(id int) (*model.User, error) {
-	var user *model.User
-	err := ur.db.First(&user, id).Error
+func (r *UserRepository) FindByEmail(email string) (*model.User, error) {
+	var user = &model.User{Email: email}
+	err := r.connection.DB.Where(&user).First(&user).Error
 
 	return user, err
 }
 
-func (ur *UserRepository) Create(input model.CreateUserInput) (*model.User, error) {
-	err := ur.db.Create(input).Error
+func (r *UserRepository) Create(input model.CreateUserPayload) (*model.User, error) {
+	err := r.connection.DB.Create(input).Error
 	return nil, err
 }
 
-func (ur *UserRepository) Update(id int, input model.UpdateUserInput) (*model.User, error) {
-	user, err := ur.Find(id)
+func (r *UserRepository) Update(input model.UpdateUserPayload) (*model.User, error) {
+	user, err := r.FindByEmail(input.Email)
 	if err != nil {
 		return &model.User{}, err
 	}
-	ur.db.Model(user).Updates(input)
+	r.connection.DB.Model(user).Updates(input)
 
 	return user, nil
 }
 
-func (ur *UserRepository) Delete(id int) (bool, error) {
-	item, err := ur.Find(id)
+func (r *UserRepository) Delete(email string) (bool, error) {
+	item, err := r.FindByEmail(email)
 	if err != nil {
 		return false, err
 	}
-	ur.db.Delete(item)
+	r.connection.DB.Delete(item)
 
 	return true, nil
 }
 
-func (ur *UserRepository) buildParamsQuery(limit int, page int, sort string) func(db *gorm.DB) *gorm.DB {
-	page = (page - 1) * limit
+func paginate(limit int, page int, sort string) func(db *gorm.DB) *gorm.DB {
+	offset := (page - 1) * limit
 	return func(db *gorm.DB) *gorm.DB {
-		return ur.db.Offset(page).Limit(limit).Order(sort)
+		return db.Offset(offset).Limit(limit).Order(sort)
 	}
 }

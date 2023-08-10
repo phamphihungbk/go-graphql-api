@@ -3,31 +3,36 @@ package resolver
 import (
 	"context"
 
-	"github.com/phamphihungbk/go-graphql/internal/model"
+	"github.com/phamphihungbk/go-graphql-api/internal/model"
 )
 
-func (r *queryResolver) User(ctx context.Context, id int) (*model.User, error) {
-	return r.userService.GetItem(id)
+// ========== Mutation ==========
+func (r *mutationResolver) CreateUser(ctx context.Context, payload model.CreateUserPayload) (*model.User, error) {
+	return r.userService.CreateUser(payload)
 }
 
+func (r *mutationResolver) UpdateUser(ctx context.Context, payload model.UpdateUserPayload) (*model.User, error) {
+	return r.userService.UpdateUser(payload)
+}
+
+func (r *mutationResolver) DeleteUser(ctx context.Context, email string) (bool, error) {
+	return r.userService.DeleteUser(email)
+}
+
+// ========== Query ==========
 func (r *queryResolver) Users(
 	ctx context.Context,
 	limit int,
 	page int,
 	sort string,
-) ([]*model.User, error) {
-	data, err := r.userService.GetAllItems(limit, page, sort)
-	return data, err
+) (*model.UsersConnection, error) {
+	return r.userService.GetAllUsers(limit, page, sort)
 }
 
-func (r *mutationResolver) CreateUser(ctx context.Context, input model.CreateUserInput) (*model.User, error) {
-	return r.userService.CreateItem(input)
+func (r *queryResolver) Me(ctx context.Context, email string) (*model.User, error) {
+	return r.userService.GetUser(email)
 }
 
-func (r *mutationResolver) UpdateUser(ctx context.Context, id int, input model.UpdateUserInput) (*model.User, error) {
-	return r.userService.UpdateItem(id, input)
-}
-
-func (r *mutationResolver) DeleteUser(ctx context.Context, id int) (bool, error) {
-	return r.userService.DeleteItem(id)
+func (r *mutationResolver) IssueToken(ctx context.Context, payload model.LoginPayload) (*model.AccessToken, error) {
+	return r.userService.IssueToken(payload)
 }

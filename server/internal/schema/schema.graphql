@@ -6,13 +6,14 @@ schema {
 
 # ========== Query ==========
 type Query {
-  users(limit: Int! = 10, page: Int! = 0, sort: String! = "Id desc"): [User]!
-  user(id: Int!): User!
+  users(limit: Int = 10, page: Int = 1, sort: String = "Id desc"): UsersConnection
+  me(email: String!): User!
+  issueToken(payload: LoginPayload!): AccessToken!
 }
 
 # ========== Mutation ==========
 type Mutation {
-  createUser(input: CreateUserInput!): User!
-  updateUser(id: Int!, update: UpdateUserInput!): User!
-  deleteUser(id: Int!): Boolean!
+  createUser(payload: CreateUserPayload!): User!
+  updateUser(payload: UpdateUserPayload!): User!
+  deleteUser(email: String!): Boolean!
 }

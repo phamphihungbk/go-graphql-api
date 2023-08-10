@@ -14,10 +14,5 @@ resolver:
   type: Resolver
   package: resolver
 
-models:
-  User:
-    model: github.com/phamphihungbk/go-graphql/internal/model.User
-  CreateUserInput:
-    model: github.com/phamphihungbk/go-graphql/internal/model.CreateUserInput
-  UpdateUserInput:
-    model: github.com/phamphihungbk/go-graphql/internal/model.UpdateUserInput
+autobind:
+  - "github.com/phamphihungbk/go-graphql-api-api/internal/model"

@@ -1,20 +1,58 @@
 # ========== User Schema ==========
 type User {
   id: Int!
-  name: String!
+  email: String!
+  name: String
+  password: String
+}
+
+# ========== Create Payload ==========
+input CreateUserPayload {
+  email: String!
+  password: String!
+  name: String
+}
+
+# ========== Update Payload ==========
+input UpdateUserPayload {
+  email: String!
+  name: String
+}
+
+# ========== Login Payload ==========
+input LoginPayload {
   email: String!
   password: String!
 }
 
-# ========== Input ==========
-input CreateUserInput {
-  name: String!
-  email: String!
-  password: String!
+type PageInfo {
+  limit: Int!
+  page: Int!
+  sort: String!
 }
 
-input UpdateUserInput {
-  name: String!
+type UsersConnection {
+  edges: [User]!
+  page_info: PageInfo!
+}
+
+type AccessToken {
+  token: String!
+}
+
+type UserCredentials {
   email: String!
-  password: String!
+  permissions: UserPermission
+  roles: UserRoles
+}
+
+enum UserRoles {
+  USER
+  GUEST
+}
+
+enum UserPermission {
+  GET
+  UPDATE
+  DELETE
 }

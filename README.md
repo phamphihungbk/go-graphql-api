@@ -5,6 +5,7 @@
 - [x] DI - [Google Wire](https://github.com/google/wire)
 - [x] Logging - [Logrus](https://github.com/Sirupsen/logrus)
 - [x] Linter - [Go Linter](https://github.com/golangci/golangci-lint)
+- [x] Debugger [Delve](https://github.com/go-delve/delve)
 - [x] Docker Support
 - [x] Pre commit
 - [ ] Dataloader
@@ -34,6 +35,10 @@ Start server
 ```bash
 make sv-start
 ```
+
+## Common golang errors:
+
+- outside available modules: remove go.sum and rerun `go get -d -v ./...`
 
 ## Screenshots
 

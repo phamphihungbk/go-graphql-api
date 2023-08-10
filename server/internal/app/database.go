@@ -3,18 +3,39 @@ package app
 import (
 	"log"
 
-	"github.com/phamphihungbk/go-graphql/config"
-	"github.com/phamphihungbk/go-graphql/internal/model"
+	"github.com/phamphihungbk/go-graphql-api/internal/config"
+	"github.com/phamphihungbk/go-graphql-api/internal/model"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
-func NewDBConnection(config *config.DBCfg) *gorm.DB {
-	db, err := gorm.Open(postgres.Open(config.DBCfg), &gorm.Config{})
-	if err != nil {
-		log.Fatalf("gorm open database connection error")
-	}
-	db.AutoMigrate(&model.User{})
+type DatabaseConnection struct {
+	isBooted bool
+	DB       *gorm.DB
+}
 
-	return db
+type IDatabaseConnection interface {
+	Boot()
+}
+
+func NewDatabaseConnection(config config.Server) *DatabaseConnection {
+	db, err := gorm.Open(postgres.Open(config.Database.ConnectionString()), &gorm.Config{})
+	if err != nil {
+		log.Fatalf("can't establish database connection")
+	}
+
+	return &DatabaseConnection{isBooted: false, DB: db}
+}
+
+func (d *DatabaseConnection) Boot() {
+	if d.isBooted {
+		return
+	}
+
+	d.runMigration()
+	d.isBooted = true
+}
+
+func (d *DatabaseConnection) runMigration() {
+	d.DB.AutoMigrate(&model.User{})
 }

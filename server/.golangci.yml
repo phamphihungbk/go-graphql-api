@@ -6,6 +6,8 @@ linters:
     - goimports
     - revive
     - govet
+    - unused
+    - gofmt
 
 linters-settings:
   revive:

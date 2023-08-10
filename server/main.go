@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/phamphihungbk/go-graphql/cmd/server"
+	"github.com/phamphihungbk/go-graphql-api/cmd/server"
 )
 
 func main() {
