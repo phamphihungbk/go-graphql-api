@@ -2,20 +2,10 @@ repos:
   - repo: https://github.com/dnephin/pre-commit-golang
     rev: v0.5.1
     hooks:
-      - id: go-fmt
-        name: go format
-
-#      - id: go-vet
-#        name: examines suspicious constructs
-#        entry: go vet server/...
-#      - id: go-imports
-#        name: update import in project
-#        entry: goimports server/
 #      - id: go-cyclo
 #        name: calculates cyclomatic complexities
 #        entry: gocyclo -over=15 server/...
-#      - id: golangci-lint
-#        name: go lint
-#        entry: golangci-lint run server/...
-#        args: ['--config=server/.golangci.yml']
+      - id: golangci-lint
+        name: go lint
+        args: ['--config=server/.golangci.yml']
 #      - id: go-unit-tests #to run unit test before push to git

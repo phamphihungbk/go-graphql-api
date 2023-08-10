@@ -21,4 +21,4 @@ RUN mkdir -p /server \
 
 ###########PRODUCTION IMAGE###################
 
-FROM golang:1.21-rc-alpine as prod
+FROM golang:1.20.7-alpine as prod
